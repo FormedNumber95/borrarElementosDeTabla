@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import static javafx.scene.control.TableView.TableViewSelectionModel;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 
 /**
@@ -68,6 +69,7 @@ public class MainApp extends Application {
                       "-fx-border-color: blue;");
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setMinWidth(385);
         stage.setTitle("Adding/Deleting Rows in a TableViews");
         stage.show();
     }
@@ -126,14 +128,20 @@ public class MainApp extends Application {
      * @return La persona
      */
     public Person getPerson() {
-        return new Person(fNameField.getText(), lNameField.getText(), dobField.getValue());
+        return new Person(fNameField.getText(), lNameField.getText(), 
+        		dobField.getValue());
     }
 
     /**
-     * Aniade una persona.
+     * Aniade una persona comprobando que todos los campos tengan contenido 
+     * y que la fecha no sea posterior a la actual.
      */
     public void addPerson() {
         Person p = getPerson();
+        if(p.getFirstName().equals("")||p.getLastName().equals("")||
+        		p.getBirthDate()==null||p.getBirthDate().isAfter(LocalDate.now())) {
+        	return;
+        }
         table.getItems().add(p);
         clearFields();
     }
